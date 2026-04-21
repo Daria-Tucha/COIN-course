@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Конструктивная обратная связь</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-lime: #B9D440;
+            --neon-lavender: #BC9BF3;
+            --neon-purple: #7360F9;
+            --bg-cream: #FFF9F5;
+            --text-dark: #2C2C2C;
+            --text-gray: #6B6B6B;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-cream);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .screen {
+            min-height: 100vh;
+            padding: 60px 20px;
+            display: none;
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* ========== SCREEN 1: PROBLEM ========== */
+        .problem-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            min-height: calc(100vh - 180px);
+        }
+
+        .problem-content {
+            animation: fadeInLeft 0.8s ease-out 0.2s backwards;
+        }
+
+        .problem-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--neon-purple), var(--neon-lavender));
+            color: white;
+            padding: 8px 24px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(115, 96, 249, 0.3);
+        }
+
+        .problem-title {
+            font-size: 52px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--neon-purple), var(--neon-lavender));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+
+        .problem-text {
+            font-size: 22px;
+            color: var(--text-dark);
+            line-height: 1.6;
+            margin-bottom: 40px;
+        }
+
+        .problem-image {
+            animation: fadeInRight 0.8s ease-out 0.3s backwards;
+        }
+
+        /* Meme Container - 16:9 */
+        .meme-frame {
+            background: linear-gradient(135deg, var(--neon-lime), var(--neon-lavender));
+            border-radius: 32px;
+            padding: 6px;
+            box-shadow: 0 12px 48px rgba(185, 212, 64, 0.3);
+        }
+
+        .meme-placeholder {
+            background: white;
+            border-radius: 26px;
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .meme-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* CTA Button */
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, var(--neon-purple), var(--neon-lavender));
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+            padding: 22px 56px;
+            border-radius: 60px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 8px 32px rgba(115, 96, 249, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 12px 48px rgba(115, 96, 249, 0.6);
+        }
+
+        .cta-button:active {
+            transform: translateY(-2px) scale(0.98);
+        }
+
+        .arrow {
+            font-size: 24px;
+            transition: transform 0.3s ease;
+        }
+
+        .cta-button:hover .arrow {
+            transform: translateX(8px);
+        }
+
+        /* ========== SCREEN 2: COIN INTERACTIVE ========== */
+        .coin-container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .coin-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .coin-title {
+            font-size: 56px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--neon-purple), var(--neon-lavender));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 16px;
+            animation: fadeInDown 0.8s ease-out backwards;
+        }
+
+        .coin-subtitle {
+            font-size: 20px;
+            color: var(--text-gray);
+            animation: fadeInDown 0.8s ease-out 0.1s backwards;
+        }
+
+        /* COIN Cards Row */
+        .coin-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .coin-card {
+            background: white;
+            border-radius: 24px;
+            padding: 32px 20px;
+            text-align: center;
+            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.06);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .coin-card:nth-child(1) {
+            animation: fadeInUp 0.8s ease-out 0.2s backwards;
+        }
+        .coin-card:nth-child(2) {
+            animation: fadeInUp 0.8s ease-out 0.3s backwards;
+        }
+        .coin-card:nth-child(3) {
+            animation: fadeInUp 0.8s ease-out 0.4s backwards;
+        }
+        .coin-card:nth-child(4) {
+            animation: fadeInUp 0.8s ease-out 0.5s backwards;
+        }
+
+        .coin-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.12);
+        }
+
+        .coin-card.active {
+            border: 3px solid var(--neon-purple);
+            transform: translateY(-4px);
+        }
+
+        .coin-card:nth-child(1).active {
+            border-color: var(--neon-purple);
+        }
+        .coin-card:nth-child(2).active {
+            border-color: var(--neon-lavender);
+        }
+        .coin-card:nth-child(3).active {
+            border-color: var(--neon-lime);
+        }
+        .coin-card:nth-child(4).active {
+            border-color: var(--neon-purple);
+        }
+
+        .coin-letter {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: 800;
+            color: white;
+            margin: 0 auto 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .coin-card:hover .coin-letter {
+            transform: rotate(5deg) scale(1.1);
+        }
+
+        .coin-card:nth-child(1) .coin-letter {
+            background: linear-gradient(135deg, var(--neon-purple), var(--neon-lavender));
+        }
+        .coin-card:nth-child(2) .coin-letter {
+            background: linear-gradient(135deg, var(--neon-lavender), var(--neon-lime));
+        }
+        .coin-card:nth-child(3) .coin-letter {
+            background: linear-gradient(135deg, var(--neon-lime), var(--neon-purple));
+        }
+        .coin-card:nth-child(4) .coin-letter {
+            background: linear-gradient(135deg, var(--neon-purple), var(--neon-lime));
+        }
+
+        .coin-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .coin-label {
+            font-size: 14px;
+            color: var(--text-gray);
+            font-weight: 500;
+        }
+
+        .visited-check {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--neon-lime);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .coin-card.visited .visited-check {
+            display: flex;
+        }
+
+        /* Details Panel */
+        .details-panel {
+            background: white;
+            border-radius: 32px;
+            padding: 40px;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
+            margin-bottom: 40px;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .details-panel.show {
+            max-height: 500px;
+            opacity: 1;
+        }
+
+        .details-header {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .details-letter {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            font-weight: 800;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .details-title-group {
+            flex: 1;
+        }
+
+        .details-name {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 6px;
+        }
+
+        .details-subtitle {
+            font-size: 18px;
+            color: var(--text-gray);
+            font-weight: 500;
+        }
+
+        .details-description {
+            font-size: 17px;
+            color: var(--text-dark);
+            line-height: 1.8;
+            margin-bottom: 24px;
+        }
+
+        .details-example {
+            background: linear-gradient(135deg, rgba(185, 212, 64, 0.1), rgba(188, 155, 243, 0.1));
+            border-radius: 20px;
+            padding: 24px;
+            border-left: 5px solid var(--neon-lavender);
+        }
+
+        .example-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--neon-purple);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 12px;
+        }
+
+        .example-text {
+            font-size: 16px;
+            color: var(--text-dark);
+            font-style: italic;
+            line-height: 1.7;
+        }
+
+        /* Bottom Actions */
+        .bottom-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 60px;
+            gap: 20px;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: transparent;
+            color: var(--text-gray);
+            font-size: 16px;
+            font-weight: 600;
+            padding: 14px 32px;
+            border-radius: 50px;
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            border-color: var(--neon-purple);
+            color: var(--neon-purple);
+            transform: translateX(-4px);
+        }
+
+        .next-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, var(--neon-lime), var(--neon-lavender));
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+            padding: 18px 44px;
+            border-radius: 60px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 8px 32px rgba(185, 212, 64, 0.4);
+            transition: all 0.3s ease;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .next-button.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .next-button:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 12px 48px rgba(185, 212, 64, 0.6);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .problem-layout {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .coin-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .bottom-actions {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .problem-title {
+                font-size: 38px;
+            }
+
+            .problem-text {
+                font-size: 18px;
+            }
+
+            .coin-title {
+                font-size: 40px;
+            }
+
+            .coin-row {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .details-panel {
+                padding: 28px;
+            }
+
+            .details-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .cta-button,
+            .next-button {
+                font-size: 16px;
+                padding: 16px 36px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .problem-title {
+                font-size: 32px;
+            }
+
+            .problem-badge {
+                font-size: 12px;
+                padding: 6px 18px;
+            }
+
+            .meme-icon {
+                font-size: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Screen 1: Problem -->
+    <div class="screen active" id="screen1">
+        <div class="container">
+            <div class="problem-layout">
+                <div class="problem-content">
+                    <div class="problem-badge">Начнём с проблемы</div>
+                    
+                    <h1 class="problem-title">В чём проблема?</h1>
+                    
+                    <p class="problem-text">
+                        Лицо вашего сотрудника, когда вы говорите ему «Молодец!» или «Плохо работаешь»
+                    </p>
+
+                    <button class="cta-button" onclick="goToScreen2()">
+                        Прокачать свой фидбэк
+                        <span class="arrow">→</span>
+                    </button>
+                </div>
+
+                <div class="problem-image">
+                    <div class="meme-frame">
+                        <div class="meme-placeholder">
+                            <img src="images/tony.jpg" alt="Лицо сотрудника">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen 2: COIN Interactive -->
+    <div class="screen" id="screen2">
+        <div class="container coin-container">
+            <div class="coin-header">
+                <h1 class="coin-title">Модель COIN</h1>
+                <p class="coin-subtitle">Нажмите на любой элемент, чтобы узнать подробнее</p>
+            </div>
+
+            <div class="coin-row">
+                <!-- Context -->
+                <div class="coin-card" data-index="0" onclick="showDetails(0)">
+                    <div class="visited-check">✓</div>
+                    <div class="coin-letter">C</div>
+                    <div class="coin-name">Context</div>
+                    <div class="coin-label">Контекст</div>
+                </div>
+
+                <!-- Observation -->
+                <div class="coin-card" data-index="1" onclick="showDetails(1)">
+                    <div class="visited-check">✓</div>
+                    <div class="coin-letter">O</div>
+                    <div class="coin-name">Observation</div>
+                    <div class="coin-label">Наблюдение</div>
+                </div>
+
+                <!-- Impact -->
+                <div class="coin-card" data-index="2" onclick="showDetails(2)">
+                    <div class="visited-check">✓</div>
+                    <div class="coin-letter">I</div>
+                    <div class="coin-name">Impact</div>
+                    <div class="coin-label">Влияние</div>
+                </div>
+
+                <!-- Next Steps -->
+                <div class="coin-card" data-index="3" onclick="showDetails(3)">
+                    <div class="visited-check">✓</div>
+                    <div class="coin-letter">N</div>
+                    <div class="coin-name">Next steps</div>
+                    <div class="coin-label">Следующие шаги</div>
+                </div>
+            </div>
+
+            <!-- Details Panel -->
+            <div class="details-panel" id="detailsPanel">
+                <div class="details-header">
+                    <div class="details-letter" id="detailsLetter"></div>
+                    <div class="details-title-group">
+                        <div class="details-name" id="detailsName"></div>
+                        <div class="details-subtitle" id="detailsSubtitle"></div>
+                    </div>
+                </div>
+                <div class="details-description" id="detailsDescription"></div>
+                <div class="details-example">
+                    <div class="example-label">Пример</div>
+                    <div class="example-text" id="detailsExample"></div>
+                </div>
+            </div>
+
+            <!-- Bottom Actions -->
+            <div class="bottom-actions">
+                <button class="back-button" onclick="goToScreen1()">
+                    <span>←</span> Назад
+                </button>
+
+                <button class="next-button" id="nextButton" onclick="goToQuiz()">
+                    Перейти к практике
+                    <span class="arrow">→</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const coinData = [
+            {
+                letter: 'C',
+                name: 'Context',
+                subtitle: 'Контекст',
+                description: 'Когда и где произошла ситуация. Укажите конкретное время и место, чтобы сотрудник сразу вспомнил ситуацию.',
+                example: '«Вчера на встрече с клиентом X в 14:00...»',
+                gradient: 'linear-gradient(135deg, var(--neon-purple), var(--neon-lavender))'
+            },
+            {
+                letter: 'O',
+                name: 'Observation',
+                subtitle: 'Наблюдение',
+                description: 'Что именно вы заметили. Описывайте факты, а не оценки. Избегайте слов «плохо», «хорошо», «неправильно».',
+                example: '«Ты перебил клиента 3 раза и не дал ему договорить свою мысль»',
+                gradient: 'linear-gradient(135deg, var(--neon-lavender), var(--neon-lime))'
+            },
+            {
+                letter: 'I',
+                name: 'Impact',
+                subtitle: 'Влияние',
+                description: 'Какое это имело влияние на результат, команду или клиента. Покажите последствия действия.',
+                example: '«Из-за этого клиент не смог объяснить свою проблему, и встреча затянулась на 20 минут»',
+                gradient: 'linear-gradient(135deg, var(--neon-lime), var(--neon-purple))'
+            },
+            {
+                letter: 'N',
+                name: 'Next steps',
+                subtitle: 'Следующие шаги',
+                description: 'Что делать дальше. Предложите конкретные действия или инструменты, которые помогут улучшить ситуацию.',
+                example: '«Давай на следующей встрече попробуем технику активного слушания: задавай уточняющие вопросы после того, как клиент закончит мысль»',
+                gradient: 'linear-gradient(135deg, var(--neon-purple), var(--neon-lime))'
+            }
+        ];
+
+        let visitedCards = new Set();
+        let currentIndex = null;
+
+        function goToScreen2() {
+            document.getElementById('screen1').classList.remove('active');
+            setTimeout(() => {
+                document.getElementById('screen2').classList.add('active');
+            }, 100);
+        }
+
+        function goToScreen1() {
+            document.getElementById('screen2').classList.remove('active');
+            setTimeout(() => {
+                document.getElementById('screen1').classList.add('active');
+            }, 100);
+        }
+
+        function showDetails(index) {
+            const data = coinData[index];
+            const panel = document.getElementById('detailsPanel');
+            const cards = document.querySelectorAll('.coin-card');
+            
+            // Отметить карточку как посещенную
+            visitedCards.add(index);
+            cards[index].classList.add('visited');
+            
+            // Проверить, все ли карточки посещены
+            checkAllVisited();
+            
+            // Если кликнули на ту же карточку - скрыть панель
+            if (currentIndex === index && panel.classList.contains('show')) {
+                panel.classList.remove('show');
+                cards[index].classList.remove('active');
+                currentIndex = null;
+                return;
+            }
+            
+            currentIndex = index;
+            
+            // Обновить активное состояние карточек
+            cards.forEach((card, i) => {
+                if (i === index) {
+                    card.classList.add('active');
+                } else {
+                    card.classList.remove('active');
+                }
+            });
+            
+            // Обновить содержимое панели
+            document.getElementById('detailsLetter').textContent = data.letter;
+            document.getElementById('detailsLetter').style.background = data.gradient;
+            document.getElementById('detailsName').textContent = data.name;
+            document.getElementById('detailsSubtitle').textContent = data.subtitle;
+            document.getElementById('detailsDescription').textContent = data.description;
+            document.getElementById('detailsExample').textContent = data.example;
+            
+            // Показать панель
+            panel.classList.add('show');
+        }
+
+        function checkAllVisited() {
+            if (visitedCards.size === 4) {
+                document.getElementById('nextButton').classList.add('show');
+            }
+        }
+
+        function goToQuiz() {
+            alert('Переход к практике — здесь будет квиз с кейсами');
+        }
+    </script>
+</body>
+</html>
